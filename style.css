@@ -1,0 +1,175 @@
+/** 
+ * Inspiration for several style values (color, radius settings) from web.whatsapp.com 
+ * Flexbox layout based on documentation from https://css-tricks.com/snippets/css/a-guide-to-flexbox/
+ * and scolling behavior for messages section from https://geon.github.io/programming/2016/02/24/flexbox-full-page-web-app-layout
+*/
+
+html, body { /* start with a clean slate full height page */
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.chat-container { /* full flex page */
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+}
+
+.messages-container { /* container for message */
+    flex: 1 1 auto; /* fill up the full page if there aren't enough messages yet */
+    display: flex;
+    flex-direction: column-reverse; /* newest messages at the bottom */
+    background-color: #e5ddd5b5;
+    font-family: sans-serif;
+    font-size: 15px;
+    color: #303030;
+    padding: 10px;
+    overflow-x: hidden;
+    overflow-y: scroll; /* enable scrolling when messages exceed window size */
+}
+
+#messages {
+    display: flex;
+    flex-direction: column;  
+    align-items: flex-start; /* display messages on the left by default (received messages) */
+}
+
+.message {
+    padding: 8px;
+    border-radius: 7.5px;
+    margin: 5px 10px;
+    padding-bottom: 5px;
+    display: flex;
+    flex-direction: column;
+    background-color: #fff;
+}
+
+.message.sent {
+    align-self: flex-end; /* override to display sent messages on the right */
+    background-color: #dcf8c6;
+}
+
+.message.waiting {
+    min-width: 35px;
+    min-height: 25px;
+    padding: 14px 0px 0px 25px
+}
+
+.timestamp {
+    margin: 5px 0 0px 10px;
+    font-size: 11px;
+    color: rgba(0,0,0,45%);
+}
+
+.input-container {
+    background-color: #f0f0f0;
+}
+
+#input-message-form {
+    display: flex;
+}
+
+input[name='input-text'], input[name='input-text']:focus {
+    flex: 1 1 auto;
+    margin: 10px;
+    padding: 10px;
+    border: 1px solid #fff;
+    border-radius: 21px;
+    outline: none;
+    font-family: sans-serif;
+    font-size: 15px;
+}
+
+.send-button {
+    margin: 10px 10px 10px 0px;
+    padding: 10px;
+}
+
+.send-button > button {
+    border: none;
+    outline: none;
+    background: none;
+    margin: 0;
+    padding: 0;
+    cursor: pointer;
+}
+
+/**
+ * ==============================================
+ * From https://css-tricks.com/almanac/properties/s/scrollbar/ 
+ * with styling inspiration from web.whatsapp.com 
+ * ==============================================
+ */
+.messages-container::-webkit-scrollbar { /* hide scrollbar on safari/chrome to make the page look more like a chat app */
+    width: 6px;
+    height: 6px;
+}
+.messages-container::-webkit-scrollbar-thumb { 
+    background-color: rgba(0,0,0,.2);
+}
+.messages-container::-webkit-scrollbar-track { 
+    background: rgba(255,255,255,.1);
+}
+
+/**
+ * ==============================================
+ * Dot Flashing from three-dots.css v0.1.0
+ *
+ * https://nzbin.github.io/three-dots/
+ *
+ * Copyright (c) 2018 nzbin
+ *
+ * Released under the MIT license
+ * ==============================================
+ */
+ .dot-flashing {
+    position: relative;
+    width: 10px;
+    height: 10px;
+    border-radius: 5px;
+    background-color: #c5c2c2;
+    color: #c5c2c2;
+    animation: dotFlashing 1s infinite linear alternate;
+    animation-delay: .5s;
+  }
+  
+  .dot-flashing::before, .dot-flashing::after {
+    content: '';
+    display: inline-block;
+    position: absolute;
+    top: 0;
+  }
+  
+  .dot-flashing::before {
+    left: -15px;
+    width: 10px;
+    height: 10px;
+    border-radius: 5px;
+    background-color: #c5c2c2;
+    color: #c5c2c2;
+    animation: dotFlashing 1s infinite alternate;
+    animation-delay: 0s;
+  }
+  
+  .dot-flashing::after {
+    left: 15px;
+    width: 10px;
+    height: 10px;
+    border-radius: 5px;
+    background-color: #c5c2c2;
+    color: #c5c2c2;
+    animation: dotFlashing 1s infinite alternate;
+    animation-delay: 1s;
+  }
+  
+  @keyframes dotFlashing {
+    0% {
+      background-color: #c5c2c2;
+    }
+    50%,
+    100% {
+      background-color: #ebe5e5;
+    }
+  }
