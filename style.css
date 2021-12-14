@@ -98,11 +98,13 @@ input[name='input-text'], input[name='input-text']:focus {
 
 /**
  * ==============================================
+ * Adjust scrollbar on safari/chrome to make the page look more like a chat app
+ *
  * From https://css-tricks.com/almanac/properties/s/scrollbar/ 
  * with styling inspiration from web.whatsapp.com 
  * ==============================================
  */
-.messages-container::-webkit-scrollbar { /* hide scrollbar on safari/chrome to make the page look more like a chat app */
+.messages-container::-webkit-scrollbar {
     width: 6px;
     height: 6px;
 }
