@@ -1,12 +1,5 @@
-function ready(fn) {
-    if (document.readyState != 'loading'){
-        fn();
-    } else {
-        document.addEventListener('DOMContentLoaded', fn);
-    }
-}
+$( document ).ready(function() {
 
-ready(function() {
     // grab query params
     const params = new URLSearchParams(window.location.search)
 
@@ -16,7 +9,7 @@ ready(function() {
     // If a valid OpenAI API key was provided, start the chat and seed the chat log
     const apiKey = params.has('key') ? params.get('key') : false;
     if (!apiKey) {
-        document.querySelector('input[name="input-text"]').disabled = true;
+        $('input[name="input-text"]').prop('disabled', true);
         addMessage('You must provide an OpenAI API key as ?key=[API KEY].');
     } else {
         let initialMessageSent = 'Hello, how are you?';
@@ -33,7 +26,7 @@ ready(function() {
         const messageDate = new Date();
         const formattedDate = messageDate.toLocaleString(undefined, dateStyle);
 
-        document.querySelector('#messages').insertAdjacentHTML('beforeend',`<div class='message ${sent ? 'sent' : 'received'}'>
+        $('#messages').append(`<div class='message ${sent ? 'sent' : 'received'}'>
             <div class='message-text'>${message}</div>
             <div class='timestamp'>${formattedDate}</div></div>`);
 
@@ -47,28 +40,25 @@ ready(function() {
 
     // show 'typing' style animation while the user waits for the computer to respond
     function startWaiting() {
-        document.querySelector('#messages').insertAdjacentHTML('beforeend',"<div class=\"message waiting\"><div class=\"dot-flashing\"></div></div>");
+        $('#messages').append("<div class=\"message waiting\"><div class=\"dot-flashing\"></div></div>");
     }
 
     // remove 'typing' style animation when the computer is ready to respond
     function stopWaiting() {
-        const waitingEl = document.querySelector('.waiting');
-        if (waitingEl.parentNode !== null) {
-            waitingEl.parentNode.removeChild(waitingEl);
-        }
+        $('.waiting').remove();
     }
 
     // handle text submission from the user
-    document.querySelector('#input-message-form').addEventListener('submit', function(event) {
+    $('#input-message-form').on('submit', function(event) {
         // stop the regular browser form submit
         event.preventDefault();
         
         // grab the user message from the form and add it to the page
-        const message = document.querySelector('input[name="input-text"]').value;
+        const message = $('input[name="input-text"]').val();
         addMessage(message, true);
 
         // reset the input field so that the user can enter another message
-        document.querySelector('#input-message-form').reset();
+        $('#input-message-form')[0].reset();
 
         // display 'typing' style animation
         startWaiting();
@@ -85,35 +75,30 @@ ready(function() {
             "best_of": 1,
             "stop": ["\n", " Human:", " AI:"]
         };        
-        let requestHeaders = {
+        let headers = {
             "Content-Type": "application/json",
             "Authorization": "Bearer "+apiKey
         }
 
         // Ask OpenAI for a response
-        fetch('https://api.openai.com/v1/engines/davinci/completions', {
-            method: 'POST',
-            headers: requestHeaders,
-            body: JSON.stringify(data),
-        })
-        .then(response => {
-            if (!response.ok) {
-                return response.text().then(text => { throw new Error(text) })
-            }
-            return response.json()
-        })
-        .then(data => {
-            const response = data.choices[0].text; // grab response text
-            stopWaiting(); // remove 'typing' animation
-            addMessage(response, false); // add response to the page as a received message
-            appendInteractionToChatlog(message, response, currentChatLog); // append user message and response to the chat log
-            // console.log(currentChatLog);
-        })
-        .catch((error) => {
-            console.error("Request error:", error.message);
-            addMessage("Hm, something went wrong. Please try again.", false);
-            stopWaiting();
-        });
+        $.ajax({
+            url: "https://api.openai.com/v1/engines/davinci/completions",
+            headers: headers,
+            data: JSON.stringify(data),
+            method: "POST",
+            dataType: "json"
+          })
+            .done(function( data ) { // handle successful response
+                const response = data.choices[0].text; // grab response text
+                stopWaiting(); // remove 'typing' animation
+                addMessage(response, false); // add response to the page as a received message
+                appendInteractionToChatlog(message, response, currentChatLog); // append user message and response to the chat log
+                // console.log(currentChatLog);
+            })
+            .fail(function() { // handle failed response
+                addMessage("Hm, something went wrong. Please try again.", false);
+                stopWaiting();
+            });
 
     });
 
