@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="style.css">
+    <!-- Google Material Icons for the send message icon -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
+    <script src="script.js"></script>
+    <title>OpenAI Chat</title>
+</head>
+<body>
+    <!-- full page chat app -->
+    <div class="chat-container"> 
+        <!-- messages section -->
+        <div class="messages-container">
+            <div id="messages"></div>
+        </div>
+        <!-- input section -->
+        <div class="input-container">
+            <form id="input-message-form">
+                <input type="text" placeholder="Type a message" name="input-text"/>
+                <div class="send-button">
+                    <button type="submit">
+                        <span class="material-icons">
+                            send
+                        </span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

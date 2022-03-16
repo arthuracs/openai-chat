@@ -1,33 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <link rel="stylesheet" href="style.css">
-    <!-- Google Material Icons for the send message icon -->
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
-      rel="stylesheet">
-    <script src="script.js"></script>
-    <title>OpenAI Chat</title>
-</head>
-<body>
-    <!-- full page chat app -->
-    <div class="chat-container"> 
-        <!-- messages section -->
-        <div class="messages-container">
-            <div id="messages"></div>
-        </div>
-        <!-- input section -->
-        <div class="input-container">
-            <form id="input-message-form">
-                <input type="text" placeholder="Type a message" name="input-text"/>
-                <div class="send-button">
-                    <button type="submit">
-                        <span class="material-icons">
-                            send
-                        </span>
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <title>OpenAI chat</title>
+  </head>
+  <body>
+    <p>Enter an OpenAI API key and select a version:</p>
+    <form id="form">
+      <input
+        type="text"
+        placeholder="OpenAI API key"
+        id="apiKey"
+        name="apiKey"
+      />
+      <input type="radio" value="native-js" id="native-js" name="version" />
+      <label for="native-js">
+        Native JS
+      </label>
+      <input type="radio" value="jquery" id="jquery" name="version" />
+      <label for="jquery">
+        jQuery
+      </label>
+      <button type="submit">Go</button>
+    </form>
+    <script>
+      const form = document.getElementById("form");
+
+      function submitForm(event) {
+        event.preventDefault();
+        const data = new FormData(form);
+        const apiKey = data.get("apiKey");
+        const version = data.get("version");
+
+        apiKey && version && location.assign(`./${version}.html?key=${apiKey}`);
+      }
+
+      form.addEventListener("submit", submitForm);
+    </script>
+  </body>
 </html>
